@@ -1,4 +1,4 @@
-const { Thoughts } = require('../models');
+const { Users, Thoughts } = require('../models');
 
 module.exports = {
     // Get all thoughts
@@ -29,7 +29,7 @@ module.exports = {
         Thoughts.create(req.body)
             .then((thought) => {
                 return Users.findOneAndUpdate(
-                    { _id: req.body.userId },
+                    { _id: req.params.userId },
                     { $push: { thoughts: thought._id } },
                     { new: true }
                 );
@@ -43,7 +43,7 @@ module.exports = {
             )
             .catch((err) => {
                 console.log(err);
-                return res.status(500).json(err);
+                return res.status(500).json(err.message);
             });
     },
 
@@ -78,7 +78,7 @@ module.exports = {
     createReaction(req, res) {
         Thoughts.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $push: { reactions: reaction._id } },
+            { $push: { reactions: req.body } },
             { new: true, runValidators: true }
         )
             .populate({ path: 'reactions', select: '-__v' })
