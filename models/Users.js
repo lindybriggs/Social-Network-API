@@ -43,6 +43,6 @@ usersSchema
     return this.friends.length;
   })
 
-const Users = model('users', usersSchema);
+const Users = model('Users', usersSchema);
 
 module.exports = Users;
